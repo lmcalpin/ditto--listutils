@@ -11,5 +11,6 @@ extern "C"
 	bool __declspec(dllexport) ConvertListToCSV(const CDittoInfo &DittoInfo, IClip *pClip);
 	bool __declspec(dllexport) ConvertCSVToList(const CDittoInfo &DittoInfo, IClip *pClip);
 	bool __declspec(dllexport) TrimEachLine(const CDittoInfo &DittoInfo, IClip *pClip);
-	bool __declspec(dllexport) Quote(const CDittoInfo &DittoInfo, IClip *pClip);
+	bool __declspec(dllexport) SingleQuote(const CDittoInfo &DittoInfo, IClip *pClip);
+	bool __declspec(dllexport) DoubleQuote(const CDittoInfo &DittoInfo, IClip *pClip);
 }
