@@ -119,16 +119,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DialogResizer.cpp" />
     <ClCompile Include="Exports.cpp" />
     <ClCompile Include="ListUtils.cpp" />
-    <ClCompile Include="PasteImageAsHtmlImage.cpp" />
-    <ClCompile Include="SelectPasteFormat.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TextConvert.cpp" />
     <ClCompile Include="TextProcessor.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -137,14 +133,10 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DialogResizer.h" />
     <ClInclude Include="Exports.h" />
     <ClInclude Include="ListUtils.h" />
-    <ClInclude Include="PasteImageAsHtmlImage.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="SelectPasteFormat.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="TextConvert.h" />
     <ClInclude Include="TextProcessor.h" />
   </ItemGroup>
   <ItemGroup>

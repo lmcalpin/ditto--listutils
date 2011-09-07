@@ -6,3 +6,4 @@ Release
 UpgradeLog*.XML
 _UpgradeReport_Files
 ipch
+*.opensdf

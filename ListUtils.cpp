@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include "ListUtils.h"
-#include "PasteImageAsHtmlImage.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -67,7 +66,5 @@ BOOL CListUtilsApp::InitInstance()
 
 int CListUtilsApp::ExitInstance()
 {
-	CPasteImageAsHtmlImage::CleanupPastedImages();
-
 	return CWinApp::ExitInstance();
 }

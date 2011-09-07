@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 #include "Exports.h"
 #include "ListUtils.h"
-#include "pasteimageashtmlimage.h"
 #include "TextProcessor.h"
 #include <iostream>
 

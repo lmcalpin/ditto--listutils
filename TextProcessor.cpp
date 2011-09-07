@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "TextProcessor.h"
-#include "SelectPasteFormat.h"
 
 const std::string WHITESPACE = " \n\r\t";
 
