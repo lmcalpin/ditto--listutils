@@ -36,54 +36,6 @@ TextProcessor::~TextProcessor(void)
 {
 }
 
-bool TextProcessor::Convert(const CDittoInfo &DittoInfo, IClip *pClip, ConversionType conversionType)
-{
-	bool ret = false;
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-
-	IClipFormats *pFormats = pClip->Clips();
-
-	CWnd* pWnd = CWnd::FromHandle(DittoInfo.m_hWndDitto);
-
-	TextProcessor textProcessor(conversionType);
-	IClipFormat *pText = pFormats->FindFormatEx(CF_TEXT);
-	if(pText != NULL)
-	{
-		//We own the data, when we call DeleteAll tell it to not free the data
-		pText->AutoDeleteData(false);
-		HGLOBAL data = pText->Data();
-
-		char *stringData = (char *)GlobalLock(data);
-
-		int size = (int)GlobalSize(data);
-		if(stringData != NULL)
-		{
-			std::string str(stringData);
-			textProcessor.Process(str);
-			size_t size = GlobalSize(pText->Data());
-			if (str.length() > size) {
-				GlobalFree(data);
-				size = str.length() + 1;
-				data = GlobalAlloc(GHND, size);
-				stringData = (char *)GlobalLock(data);
-			}
-			strcpy_s(stringData, size, str.c_str());
-		}
-		GlobalUnlock(data);
-
-		//Remove all over formats and add the selected date back as CF_TEXT
-		pFormats->DeleteAll();
-		pFormats->AddNew(CF_TEXT, data);
-		IClipFormat *pText = pFormats->FindFormatEx(CF_TEXT);
-		if(pText != NULL)
-		{
-			pText->AutoDeleteData(true);
-		}
-		ret = true;
-	}
-	return ret;
-}
-
 void TextProcessor::NoConversion(std::stringstream& outputbuffer, std::stringstream& tempbuffer)
 {
 	std::string temp = tempbuffer.str();
@@ -109,7 +61,7 @@ void TextProcessor::Trim(std::stringstream& outputbuffer, std::stringstream& tem
 	outputbuffer << temp;
 }
 
-void TextProcessor::Process(std::string& str)
+std::string TextProcessor::Process(std::string str)
 {
 	std::stringstream outputbuffer;
 	std::stringstream tempbuffer;
@@ -134,8 +86,7 @@ void TextProcessor::Process(std::string& str)
 		outputbuffer << outputDelimiter;
 	}
 	std::string row = outputbuffer.str();
-	TrimLine(row);
-	str = row;
+	return row;
 }
 
 void TextProcessor::TrimLine(std::string& str)

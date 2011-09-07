@@ -3,7 +3,9 @@
 #include "ListUtils.h"
 #include "pasteimageashtmlimage.h"
 #include "TextProcessor.h"
+#include <iostream>
 
+bool Convert(const CDittoInfo &DittoInfo, IClip *pClip, ConversionType conversionType);
 
 bool DittoAddin(const CDittoInfo &DittoInfo, CDittoAddinInfo &info)
 {
@@ -70,26 +72,75 @@ bool SupportedFunctions(const CDittoInfo &DittoInfo, FunctionType type, std::vec
 
 bool ConvertListToCSV(const CDittoInfo &DittoInfo, IClip *pClip)
 {
-	return TextProcessor::Convert(DittoInfo, pClip, CONVERT_LIST_TO_CSV);
+	return Convert(DittoInfo, pClip, CONVERT_LIST_TO_CSV);
 }
 
 bool ConvertCSVToList(const CDittoInfo &DittoInfo, IClip *pClip)
 {
-	return TextProcessor::Convert(DittoInfo, pClip, CONVERT_CSV_TO_LIST);
+	return Convert(DittoInfo, pClip, CONVERT_CSV_TO_LIST);
 }
 
 bool TrimEachLine(const CDittoInfo &DittoInfo, IClip *pClip)
 {
-	return TextProcessor::Convert(DittoInfo, pClip, TRIM);
+	return Convert(DittoInfo, pClip, TRIM);
 }
 
 bool SingleQuote(const CDittoInfo &DittoInfo, IClip *pClip)
 {
-	return TextProcessor::Convert(DittoInfo, pClip, SINGLE_QUOTE);
+	return Convert(DittoInfo, pClip, SINGLE_QUOTE);
 }
 
 bool DoubleQuote(const CDittoInfo &DittoInfo, IClip *pClip)
 {
-	return TextProcessor::Convert(DittoInfo, pClip, DOUBLE_QUOTE);
+	return Convert(DittoInfo, pClip, DOUBLE_QUOTE);
+}
+
+bool Convert(const CDittoInfo &DittoInfo, IClip *pClip, ConversionType conversionType)
+{
+	bool ret = false;
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	IClipFormats *pFormats = pClip->Clips();
+
+	CWnd* pWnd = CWnd::FromHandle(DittoInfo.m_hWndDitto);
+
+	TextProcessor textProcessor(conversionType);
+	IClipFormat *pText = pFormats->FindFormatEx(CF_TEXT);
+	if(pText != NULL)
+	{
+		//We own the data, when we call DeleteAll tell it to not free the data
+		pText->AutoDeleteData(false);
+		HGLOBAL data = pText->Data();
+
+		char *stringData = (char *)GlobalLock(data);
+
+		int size = (int)GlobalSize(data);
+		if(stringData != NULL)
+		{
+			std::string str(stringData);
+			std::string ret = textProcessor.Process(str);
+
+			size_t size = GlobalSize(pText->Data());
+			if (ret.length() > size) {
+				GlobalFree(data);
+				size = ret.length() + 1;
+				data = GlobalAlloc(GHND, size);
+				stringData = (char *)GlobalLock(data);
+			}
+			strcpy_s(stringData, size, ret.c_str());
+		}
+		GlobalUnlock(data);
+
+		//Remove all over formats and add the selected date back as CF_TEXT
+		pFormats->DeleteAll();
+		pFormats->AddNew(CF_TEXT, data);
+		IClipFormat *pText = pFormats->FindFormatEx(CF_TEXT);
+		if(pText != NULL)
+		{
+			pText->AutoDeleteData(true);
+		}
+		ret = true;
+	}
+	return ret;
 }
 

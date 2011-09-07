@@ -1,7 +1,5 @@
 #pragma once
 
-#include "..\..\Shared\DittoDefines.h"
-#include "..\..\Shared\IClip.h"
 #include <vector>
 #include <string>
 #include <sstream>
@@ -23,9 +21,7 @@ public:
 	TextProcessor(ConversionType conversionType);
 	~TextProcessor(void);
 
-	static bool Convert(const CDittoInfo &DittoInfo, IClip *pClip, ConversionType conversionType);
-
-	void Process(std::string& input);
+	std::string Process(std::string input);
 private:
 	static void TextProcessor::TrimLine(std::string& str);
 
