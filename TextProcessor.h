@@ -29,6 +29,8 @@ private:
 	static void TextProcessor::Trim(std::stringstream& outputbuffer, std::stringstream& tempbuffer);
 	static void TextProcessor::SingleQuote(std::stringstream& outputbuffer, std::stringstream& tempbuffer);
 	static void TextProcessor::DoubleQuote(std::stringstream& outputbuffer, std::stringstream& tempbuffer);
+	
+	void AppendOutputDelimiter(std::stringstream& ss);
 
 	char inputDelimiter;
 	char outputDelimiter;

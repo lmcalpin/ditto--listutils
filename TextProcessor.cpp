@@ -73,7 +73,7 @@ std::string TextProcessor::Process(std::string str)
 		if (c == inputDelimiter)
 		{
 			converter(outputbuffer, tempbuffer);
-			outputbuffer << outputDelimiter;
+			AppendOutputDelimiter(outputbuffer);
 			tempbuffer.str("");
 			continue;
 		}
@@ -82,10 +82,18 @@ std::string TextProcessor::Process(std::string str)
 	if (tempbuffer.str().length())
 	{
 		converter(outputbuffer, tempbuffer);
-		outputbuffer << outputDelimiter;
+		AppendOutputDelimiter(outputbuffer);
 	}
 	std::string row = outputbuffer.str();
 	return row;
+}
+
+void TextProcessor::AppendOutputDelimiter(std::stringstream& ss)
+{
+	if (outputDelimiter == '\n')
+		ss << "\r\n";
+	else
+		ss << outputDelimiter;
 }
 
 void TextProcessor::TrimLine(std::string& str)
